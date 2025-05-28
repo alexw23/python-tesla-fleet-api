@@ -197,6 +197,7 @@ class VehicleFleet(Vehicle):
         self, lat: float, lon: float, order: int | None = None
     ) -> dict[str, Any]:
         """Start navigation to given coordinates. Order can be used to specify order of multiple stops."""
+        order = order or 1
         return await self._request(
             Method.POST,
             f"api/1/vehicles/{self.vin}/command/navigation_gps_request",
@@ -216,13 +217,14 @@ class VehicleFleet(Vehicle):
         )
 
     async def navigation_sc_request(
-        self, id: int, order: int | None = None
+        self, id: str, order: int | None = None
     ) -> dict[str, Any]:
         """Sends a location to the in-vehicle navigation system."""
+        order = order or 1
         return await self._request(
             Method.POST,
             f"api/1/vehicles/{self.vin}/command/navigation_sc_request",
-            json={"type": type, "id": id, "order": order},
+            json={"id": id, "order": order},
         )
 
     async def remote_auto_seat_climate_request(
